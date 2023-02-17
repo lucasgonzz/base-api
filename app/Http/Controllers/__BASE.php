@@ -34,6 +34,7 @@ class MODEL_NAMEController extends Controller
 
     public function store(Request $request) {
         $model = MODEL_NAME::create([
+            'num'                   => $this->num('MODEL_NAME'),
             'name'                  => $request->name,
             'user_id'               => $this->userId(),
         ]);

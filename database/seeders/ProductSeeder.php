@@ -15,7 +15,7 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::where('company_name', 'Lucas')->first();
+        $user = User::where('company_name', 'Empresa de lucas')->first();
         $models = [
             [
                 'name'      => 'Telefono',

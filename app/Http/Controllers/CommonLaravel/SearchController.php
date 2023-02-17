@@ -4,7 +4,7 @@ namespace App\Http\Controllers\CommonLaravel;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Helpers\ArticleHelper;
-use App\Http\Controllers\Helpers\GeneralHelper;
+use App\Http\Controllers\CommonLaravel\Helpers\GeneralHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -18,7 +18,6 @@ class SearchController extends Controller
         } else {
             $filters = $_filters;
         }
-        Log::info($filters);
         foreach ($filters as $filter) {
             if (isset($filter['type'])) {
                 if ($filter['type'] == 'number') {
@@ -42,7 +41,7 @@ class SearchController extends Controller
                     // Log::info('Filtrando por boolean '.$filter['text']);
                 } else if ($filter['type'] != 'boolean' && $filter['value'] != 0) {
                     $models = $models->where($filter['key'], $filter['value']);
-                    // Log::info('Filtrando por value '.$filter['text']);
+                    Log::info('Filtrando por value '.$filter['text']);
                 }
             }
         }
@@ -59,5 +58,18 @@ class SearchController extends Controller
         } else {
             return $models;
         }
+    }
+
+    function saveIfNotExist(Request $request, $_model_name, $property, $query) {
+        $model_name = GeneralHelper::getModelName($_model_name);
+        $data = [];
+        $data['num'] = $this->num($_model_name.'s');
+        $data['user_id'] = $this->userId();
+        foreach ($request->properties_to_set as $property_to_set) {
+            $data[$property_to_set['key']] = $property_to_set['value'];
+        }
+        // $data[$property] = $query;
+        $model = $model_name::create($data);
+        return response()->json(['model' => $this->fullModel($_model_name, $model->id), 201]);
     }
 }

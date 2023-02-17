@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Helpers;
+namespace App\Http\Controllers\CommonLaravel\Helpers;
 
 use App\Article;
+use App\Http\Controllers\CommonLaravel\Helpers\UserHelper;
 use App\Http\Controllers\Helpers\ArticleHelper;
-use App\Http\Controllers\Helpers\UserHelper;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -47,6 +47,19 @@ class GeneralHelper {
         }
         return $result;
     }
+    
+    static function attachModels($model, $relation_name, $relation_models, $pivot_values = null) {
+        $model->{$relation_name}()->detach();
+        foreach ($relation_models as $relation_model) {
+            $_pivot_values = [];
+            if (!is_null($pivot_values)) {
+                foreach ($pivot_values as $pivot_value) {
+                    $_pivot_values[$pivot_value] = $relation_model['pivot'][$pivot_value];
+                }
+            }
+            $model->{$relation_name}()->attach($relation_model['id'], $_pivot_values);
+        }
+    }
 
     static function checkNewValuesForArticlesPrices($current_value, $new_value, $from_model_id = null, $model_id = null) {
         if ($current_value != $new_value) {
@@ -76,8 +89,8 @@ class GeneralHelper {
     }
 
     static function getModelName($model_name) {
-        $model_name = 'App\Models\/'.ucfirst($model_name);
-        $model_name = str_replace('/', '', $model_name);
+        $model_name = 'App\Models\-'.ucfirst($model_name);
+        $model_name = str_replace('-', '', $model_name);
         if (str_contains($model_name, '_')) {
             $pos = strpos($model_name, '_');
             $sub_str = substr($model_name, $pos+1);

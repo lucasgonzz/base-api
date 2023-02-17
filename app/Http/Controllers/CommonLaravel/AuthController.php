@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CommonLaravel;
 
+use App\Http\Controllers\CommonLaravel\Helpers\UserHelper;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class AuthController extends Controller
         } else if (Auth::attempt(['doc_number' => $request->doc_number, 
                            'password' => $request->password], $request->remember)) {
             $login = true;
-            $user = Auth()->user();
+            $user = UserHelper::getFullModel(false);
         } 
         return response()->json([
             'login' => $login,

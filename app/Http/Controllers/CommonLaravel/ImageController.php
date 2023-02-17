@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\CommonLaravel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Helpers\GeneralHelper;
+use App\Http\Controllers\CommonLaravel\Helpers\GeneralHelper;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

@@ -33,7 +33,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    function scopeWithAll($query) {
-        return null;
+    function scopeWithAll($q) {
+        $q->with('permissions');
+    }
+
+    function permissions() {
+        return $this->belongsToMany(Permission::class);
     }
 }
