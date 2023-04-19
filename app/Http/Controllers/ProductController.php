@@ -23,6 +23,7 @@ class ProductController extends Controller
             'is_good'               => $request->is_good,
             'user_id'               => $this->userId(),
         ]);
+        $this->sendAddModelNotification('Product', $model->id);
         return response()->json(['model' => $this->fullModel('Product', $model->id)], 201);
     }  
 
@@ -32,6 +33,7 @@ class ProductController extends Controller
         $model->price               = $request->price;
         $model->is_good             = $request->is_good;
         $model->save();
+        $this->sendAddModelNotification('Product', $model->id);
         return response()->json(['model' => $this->fullModel('Product', $model->id)], 200);
     }
 
